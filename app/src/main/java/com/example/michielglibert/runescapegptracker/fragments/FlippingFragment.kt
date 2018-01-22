@@ -1,11 +1,14 @@
 package com.example.michielglibert.runescapegptracker.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.LinearLayout
 import android.widget.Toast
 
@@ -35,13 +38,20 @@ class FlippingFragment : Fragment() {
         rvFlips.adapter = FlipAdapter(items) {
             Toast.makeText(context, "Clicked ${it.name}", Toast.LENGTH_SHORT).show()
         }
+        rvFlips.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                if (dy > 0) fabAddFlip.hide() else if (dy < 0) fabAddFlip.show()
+            }
+        })
 
-        txtFlippingProfit.text = calculateProfit().toString()
+        txtFlippingProfit.text =
+                if (calculateProfit() > 0) "+${calculateProfit().toString()} gp"
+                else "${calculateProfit().toString()} gp"
     }
 
     fun calculateProfit(): Int {
         var sum = 0
-        items.forEach { sum + it.calculateProfit() }
+        items.forEach { sum += it.calculateProfit() }
         return sum
     }
 

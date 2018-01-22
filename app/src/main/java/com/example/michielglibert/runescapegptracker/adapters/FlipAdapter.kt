@@ -1,6 +1,8 @@
 package com.example.michielglibert.runescapegptracker.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +30,8 @@ class FlipAdapter(val items: List<Flip>, val listener: (Flip) -> Unit) : Recycle
         fun bind(item: Flip, listener: (Flip) -> Unit) = with(itemView) {
             txtFlipName.setText(item.name)
             val profit = item.calculateProfit()
-            txtProfit.setText(if (profit > 0) "+$profit gp" else "$profit gp")
+            txtProfit.text = if (profit > 0) "+$profit gp" else "$profit gp"
+            if (profit < 0 ) txtProfit.setTextColor(Color.parseColor("#ed151c"))
             setOnClickListener { listener(item) }
         }
     }
